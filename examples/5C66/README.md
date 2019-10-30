@@ -26,7 +26,7 @@ These can be analysed with MRFANA via e.g.
   mrfana -n -20      autoPROC.01/XDS_ASCII.HKL                | tee XDS_ASCII.mrfana.log
 ```
 
-Of course, the full autoPROC processing analysis contains additional information and plots - see [summary_inlined.html](http://htmlpreview.github.com/?https://github.com/githubgphl/MRFANA/blob/master/Examples/5C66/autoPROC.01/summary_inlined.html) and e.g. [report_staraniso.pdf](autoPROC.01/report_staraniso.pdf). With the correct information about the anisotropy analysis (since the crystal diffracts anisotropically to 2.3A in two and 1.6A in the third direction), one can also run
+Of course, the full autoPROC processing analysis contains additional information and plots - see [summary_inlined.html](http://htmlpreview.github.com/?https://github.com/githubgphl/MRFANA/blob/master/examples/5C66/autoPROC.01/summary_inlined.html) and e.g. [report_staraniso.pdf](autoPROC.01/report_staraniso.pdf). With the correct information about the anisotropy analysis (since the crystal diffracts anisotropically to 2.3A in two and 1.6A in the third direction), one can also run
 ```
   mrfana -nref -1000 autoPROC.01/aimless_alldata_unmerged.mtz \
     -ell 2.33 1.0 0.0 0.0 2.33 0.0 1.0 0.0 1.625 0.0 0.0 1.0 | tee aimless_alldata_unmerged.mrfana-aniso.log
