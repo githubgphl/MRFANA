@@ -21,8 +21,8 @@ c
       double precision cell(6),
      +     resmin , resmax , resstp ,
      +     resmin3, resmax3, resstp3,
-     +     resmin_run(maxruns) ,
-     +     resmax_run(maxruns) ,
+     +     resmin_run(0:maxruns) ,
+     +     resmax_run(0:maxruns) ,
      +     resstp_run(maxruns) ,
      +     resmin3_run(maxruns),
      +     resmax3_run(maxruns),
@@ -34,6 +34,6 @@ c
      +                resmin_run , resmax_run , resstp_run ,
      +                resmin3_run, resmax3_run, resstp3_run
 c
-      logical lshell3
+      logical lshell3, l_have_ranges
 c
-      common /info_l/ lshell3
+      common /info_l/ lshell3, l_have_ranges
