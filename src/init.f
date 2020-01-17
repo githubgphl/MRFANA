@@ -73,9 +73,12 @@ c
       ranges = 0.0
       clabs = ' '
       ilabs = 0
+      l_have_ranges = .false.
 c
       run_reslim(1,0) = -999999.
       run_reslim(2,0) =  999999.
+      resmin_run(0) = -999999.
+      resmax_run(0) =  999999.
       run_nref = 0
 c
       cmpl_nshell = 0
