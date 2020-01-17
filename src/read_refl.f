@@ -72,17 +72,21 @@ c ----------------------------------------------------------------------
 c
       if (filtyp.eq.'MTZ') then
 
-        if (icol(i_batch).gt.0) then
-          allocate(bat2dsetid(nint(ranges(1,icol(i_batch))):
-     +                        nint(ranges(2,icol(i_batch)))),stat=istat)
-          if (istat.ne.0)
-     +      call error_exit('unable to allocate bat2dsetid array')
-        else
-          allocate(bat2dsetid(1:1),stat=istat)
-          if (istat.ne.0)
-     +      call error_exit('unable to allocate bat2dsetid(1:1) array')
+        if (l_have_ranges) then
+          if (icol(i_batch).gt.0) then
+            allocate(bat2dsetid(nint(ranges(1,icol(i_batch))):
+     +                          nint(ranges(2,icol(i_batch)))),
+     +                          stat=istat)
+            if (istat.ne.0)
+     +        call error_exit('unable to allocate bat2dsetid array')
+          else
+            allocate(bat2dsetid(1:1),stat=istat)
+            if (istat.ne.0)
+     +        call error_exit('unable to allocate '//
+     +                        'bat2dsetid(1:1) array')
+          end if
+          bat2dsetid = 0
         end if
-        bat2dsetid = 0
 
         call lrrewd(lun)
         leof = .false.
@@ -96,6 +100,21 @@ c
      +          ' ( ',(100.0*nref(2))/nref(1),' %)'
             end if
             call lrrefl(lun,reso2,adata,leof)
+
+c           do we have a MTZ file with incorrect/unset range values?
+            if (.not.l_have_ranges) then
+              if (nref(2).eq.1) then
+                do i=1, ncol
+                  ranges(1,i) = adata(i)
+                  ranges(2,i) = adata(i)
+                end do
+              else
+                do i=1, ncol
+                  ranges(1,i) = min(ranges(1,i),adata(i))
+                  ranges(2,i) = max(ranges(2,i),adata(i))
+                end do
+              end if
+            end if
 c
 c           use same routine for resolution calculation throughout
             ihkl(1) = nint(adata(1))
@@ -112,15 +131,21 @@ c
 
             if (icol(i_batch).gt.0) then
               ibat = nint(adata(icol(i_batch)))
-              if (bat2dsetid(ibat).eq.0) then
+              if (l_have_ranges) then
+                if (bat2dsetid(ibat).eq.0) then
+                  call lrbsetid(lun,ibat,ibatsetid)
+                  bat2dsetid(ibat) = ibatsetid
+                else
+                  ibatsetid = bat2dsetid(ibat)
+                end if
+              else
                 call lrbsetid(lun,ibat,ibatsetid)
-                bat2dsetid(ibat) = ibatsetid
               end if
             else
               ibat = 1
-              bat2dsetid(ibat) = 1
+              ibatsetid = 1
             end if
-            reso2 = dstar(ihkl,bat2dsetid(ibat))
+            reso2 = dstar(ihkl,ibatsetid)
 
             iset = 0
             reso = 1./sqrt(reso2)
@@ -185,7 +210,9 @@ c
               goto 20
             end if
             run_reslim(1,0) = max(run_reslim(1,0),reso)
+            resmin_run(  0) = (1.0d0/run_reslim(1,0))**2
             run_reslim(2,0) = min(run_reslim(2,0),reso)
+            resmax_run(  0) = (1.0d0/run_reslim(2,0))**2
 c
             batlim(1) = min(batlim(1),ibat)
             batlim(2) = max(batlim(2),ibat)
@@ -290,7 +317,7 @@ c     update ranges
         end do
  30     call lrrewd(lun)
 c
-        deallocate(bat2dsetid)
+        if (l_have_ranges) deallocate(bat2dsetid)
 c
 c ----------------------------------------------------------------------
 c
@@ -409,7 +436,9 @@ c
             goto 100
           end if
           run_reslim(1,0) = max(run_reslim(1,0),reso)
+          resmin_run(  0) = (1.0d0/run_reslim(1,0))**2
           run_reslim(2,0) = min(run_reslim(2,0),reso)
+          resmax_run(  0) = (1.0d0/run_reslim(2,0))**2
 c
           reso3 = sqrt(reso2)**3
 c         
