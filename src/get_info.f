@@ -42,7 +42,7 @@ c
       character*1 ltype
       character*10 pgnam
       real rsym_t(4,4,192)
-      logical lprint
+      logical lprint, l_have_ranges
 c
       integer c2i
       external c2i
@@ -199,7 +199,16 @@ c     MTZ
 c     --------------------------------------------------------
       else if  (filtyp(1:3).eq.'MTZ') then
         call lrinfo (lun,version,ncol,nref(1),ranges_t)
-        ranges = ranges_t
+
+        l_have_ranges = .true.
+        do i = 1, ncol
+          if (ranges_t(1,i).gt.ranges_t(2,i)) then
+            l_have_ranges = .false.
+            exit
+          end if
+        end do
+        if (l_have_ranges) ranges = ranges_t
+
         call lrclab (lun,clabs,ctyps,ncol)
         ncoltot = ncol
         do i = 1, ncol
@@ -215,7 +224,7 @@ c
 c       unmerged MTZ files from AIMLESS 0.1.29 (at least) store the Laue
 c       Group in the SYMINF record of the MTZ file - and the CCP4
 c       library routines for extracting the Point Group therefore return
-c       the wrong item! Therefore we need to cal MSYMLB again to get the
+c       the wrong item! Therefore we need to call MSYMLB again to get the
 c       correct value directly from syminfo.lib.
 c
         call msymlb(99,symm,spgrn,pgnam,nsymp,nsym,rsym_t)
@@ -263,8 +272,9 @@ c
         if ((abs(sortx(1)).ne.1).or.
      +      (abs(sortx(2)).ne.2).or.
      +      (abs(sortx(3)).ne.3)    ) then
-          call error_exit('wrong sort-order in MTZ file, ' //
-     +      'please sort on H, K, L')
+          write(stdout,'(/,a)')
+     +      ' MTZ file is not marked as being sorted on H, K, L - '
+     +      //'will possibly need to do internal sorting.'
         end if
       end if
 c
