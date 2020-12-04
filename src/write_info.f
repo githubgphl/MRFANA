@@ -73,8 +73,10 @@ c
       write(stdout,'(2a)') '  the intensities we are computing ',
      +  'during merging:'
       write(stdout,'(1a)') ' '
-      write(stdout,'(2a)') '    <I> = sum_j ( Wj * Ij )              ',
+      write(stdout,'(1a)') '           sum_j ( Wj * Ij )'
+      write(stdout,'(2a)') '    <I> = -------------------            ',
      +  '                        (3)'
+      write(stdout,'(1a)') '           sum_j ( Wj      )'
       write(stdout,'(1a)') ' '
       write(stdout,'(1a)') '                    1     '
       write(stdout,'(2a)') '    with:  Wj = ---------                ',
@@ -100,9 +102,9 @@ c
       write(stdout,'(2a)') '           sum_i [Ni /( Ni - 1)]^(1/2) ',
      +  'sum_j | Ij - <Ii> |'
       write(stdout,'(2a)') '    Rrim = -------------------------',
-     +  '--------------------         (5)'
+     +  '----------------------       (5)'
       write(stdout,'(2a)') '           sum_i (                  ',
-     +  'sum_j   Ij         )'
+     +  '   sum_j   Ij        )'
       write(stdout,'(1a)') ' '
       write(stdout,'(2a)') '    Ij   = the intensity of the jth ',
      +  'observation of reflection i'
@@ -126,10 +128,10 @@ c
       write(stdout,'(1a)') ' '
       write(stdout,'(2a)') '           sum_i [Ni /( Ni - 1)]^(1/2) ',
      +  'sum_j | Ij - <Ii> |'
-      write(stdout,'(2a)') '    Rrim = -------------------------------',
-     +  '--------------         (6)'
-      write(stdout,'(2a)') '           sum_i (                  sum_j ',
-     +  '       <Ii>  )'
+      write(stdout,'(2a)') '    Rrim = ----------------------------',
+     +  '-------------------       (6)'
+      write(stdout,'(2a)') '           sum_i (                    ',
+     +  ' sum_j        <Ii> )'
       write(stdout,'(1a)') ' '
       write(stdout,'(2a)')
      +  ' ####--------------------------------------',
@@ -147,19 +149,19 @@ c
       write(stdout,'(2a)') '           sum_i [  1/(Ni - 1)]^(1/2) ',
      +  'sum_j | Ij - <Ii> |'
       write(stdout,'(2a)') '    Rpim = -------------------------',
-     +  '--------------------         (7)'
+     +  '---------------------        (7)'
       write(stdout,'(2a)') '           sum_i (                  ',
-     +  'sum_j   Ij         )'
+     +  '  sum_j   Ij        )'
       write(stdout,'(1a)') ' '
       write(stdout,'(2a)') '  As above, Evans (2006) defines this ',
      +  'differently as:'
       write(stdout,'(1a)') ' '
       write(stdout,'(2a)') '           sum_i [  1/(Ni - 1)]^(1/2) ',
      +  'sum_j | Ij - <Ii> |'
-      write(stdout,'(2a)') '    Rrim = -------------------------',
-     +  '--------------------         (8)'
+      write(stdout,'(2a)') '    Rpim = -------------------------',
+     +  '---------------------        (8)'
       write(stdout,'(2a)') '           sum_i (                  ',
-     +  'sum_j        <Ii>  )'
+     +  '  sum_j        <Ii> )'
       write(stdout,'(1a)') ' '
       write(stdout,'(2a)') ' To add more complexity, all of the ',
      +  'above statistics (Rmerge, Rmeas'
