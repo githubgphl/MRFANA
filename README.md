@@ -12,7 +12,7 @@ You will need
 
 To compile your own copy of CCP4 libraries:
 ```
-git clone https://github.com/cctbx/ccp4io.git
+git clone https://github.com/githubgphl/ccp4io.git
 cd ccp4io
 dir=`pwd`
 
