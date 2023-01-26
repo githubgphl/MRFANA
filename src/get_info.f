@@ -42,7 +42,7 @@ c
       character*1 ltype
       character*10 pgnam
       real rsym_t(4,4,192)
-      logical lprint, l_have_ranges
+      logical lprint
 c
       integer c2i
       external c2i
