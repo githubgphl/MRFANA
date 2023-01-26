@@ -10,10 +10,27 @@ You will need
 * a Fortran compiler (e.g. Intel's ifort or GNU gfortran)
 * a copy of the [CCP4](http://www.ccp4.ac.uk/) libraries compatible with your Fortran compiler
 
+To compile your own copy of CCP4 libraries:
+```
+git clone https://github.com/cctbx/ccp4io.git
+cd ccp4io
+dir=`pwd`
+
+cd libccp4
+FFLAGS="-O2 -fallow-argument-mismatch" ./configure --prefix=$dir
+make
+make install
+
+cd ../mmdb
+g++ -O2 -c *.cpp
+ar r ../lib/libmmdb2.a *.o
+ranlib ../lib/libmmdb2.a
+```
+
 Compile with e.g.
 ```
 cd src
-gfortran -o mrfana *.f *.f90 -L/where/ever/ccp4/lib -lccp4f -lccp4c
+gfortran -o mrfana *.f *.f90 -L/where/ever/ccp4/lib -lccp4f -lccp4c   # maybe add -static to get static binaries
 ````
 or
 ```
@@ -21,8 +38,11 @@ cd src
 ifort -o mrfana *.f *.f90 -L/where/ever/ccp4/lib -lccp4f -lccp4c
 ```
 
+
+
 If you have a standard CCP4 installation (that comes with shared
-libraries), the following commands might also work on Linux:
+libraries), the following commands might also work on Linux (but it
+depends on your compiler version):
 ```
 cd src
 gfortran -o mrfana *.f *.f90 -L$CLIB -lccp4f -Wl,-rpath,$CLIB
@@ -32,6 +52,7 @@ or
 cd src
 ifort -o mrfana *.f *.f90 -L$CLIB -lccp4f -Wl,-rpath,$CLIB 
 ```
+
 
 ## Running
 
